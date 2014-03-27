@@ -1,7 +1,3 @@
-3d-barCss
-=========
-
-3d bar In Css 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -38,6 +34,10 @@
             height: 500px;
             border: 2px solid black;
         }
+        #drop.overDrop
+        {
+            background-color: Blue;
+        }
     </style>
 </head>
 <body>
@@ -63,13 +63,17 @@
         var dropElements = [];
 
         for (var elementId in o.dropElementIds) {
-            dropElements.push({
-                element: $('#' + elementId),
-                top: this.element.position().top,
-                left: this.element.position().left,
-                right: this.element.position().left + this.element.width(),
-                bottom: this.element.position().top + this.element.height()
-            });
+            var $element = $('#' + o.dropElementIds[elementId]);
+
+            if (!($element.length == 0)) {
+                dropElements.push({
+                    element: $element,
+                    top: $element.position().top,
+                    left: $element.position().left,
+                    right: $element.position().left + $element.width(),
+                    bottom: $element.position().top + $element.height()
+                });
+            }
         }
 
         //alert(dropElement.element.width());
@@ -86,13 +90,15 @@
         this.checkForDrop = function (x, y) {
             console.log('mouse move triggered' + dropElements[0].top);
             for (var dropElement in dropElements) {
-                if (x > dropElement.left && x < dropElement.right && y > dropElement.top && y < dropElement.bottom) {
-                    dropElement.element.css({
+                if (x > dropElements[dropElement].left && x < dropElements[dropElement].right && y > dropElements[dropElement].top && y < dropElements[dropElement].bottom) {
+                    dropElements[dropElement].element.addClass('overDrop');
+                    dropElements[dropElement].element.css({
                         'border-color': 'yellow'
                     });
                 }
                 else {
-                    dropElement.element.css({
+                    dropElements[dropElement].element.removeClass('overDrop');
+                    dropElements[dropElement].element.css({
                         'border-color': 'black'
                     });
                 }
@@ -140,8 +146,10 @@
 
     };
 
-    $("#abc").dragNdrop({ dropElementId: 'drop' });
 
+    $(document).ready(function () {
+        $('#abc').dragNdrop({ dropElementIds: ['drop', 'drop2'] });
+    });
 
 </script>
 </html>
