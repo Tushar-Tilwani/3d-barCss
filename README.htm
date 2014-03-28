@@ -113,12 +113,13 @@
 
         }
         this.on('mousedown touchstart', function (event) {
-            event.preventDefault();
+            event.preventDefault(); 
+            var ev = event.originalEvent.touches ? event.originalEvent.touches[0] : event;
             flag = true;
             console.log('mouse down triggered');
             //alert(event.originalEvent.touches);
-            posX = event.pageX;
-            posY = event.pageY;
+            posX = ev.pageX;
+            posY = ev.pageY;
             top = that.position().top;
             left = that.position().left;
         });
